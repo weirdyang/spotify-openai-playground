@@ -61,7 +61,8 @@ async function getTwitterProfilePic(username) {
       console.log(JSON.stringify(userData));
       const profile = userData.profile_image_url_https;
       const banner = userData.profile_banner_url;
-      return { profile, banner }
+      const description = userData.description;
+      return { profile, banner, description }
   } catch (error) {
     console.error('Error fetching Twitter profile:', error);
     return null;
@@ -83,8 +84,25 @@ async function analyzeProfile(profileDescription, recentTweets) {
     return null;
   }
 }
-async function analyzeProfilePic({ profile, banner }) {
+async function analyzeProfilePic({ profile, banner, description }) {
   console.log(profile, banner);
+  const content = [
+    { type: "text", text: imagePrompt(description) },
+    {
+      type: "image_url",
+      image_url: {
+        "url":  profile, // either url (not local) or base64. file id is used only in assistants api.
+      },
+    }
+  ];
+  if(banner) {
+    content.push(    {
+      type: "image_url",
+      image_url: {
+        "url":  banner, // either url (not local) or base64. file id is used only in assistants api.
+      },
+    },)
+  }
   try {
     const completion = await openai.chat.completions.create({
       model: 'gpt-4o-mini',
@@ -92,21 +110,7 @@ async function analyzeProfilePic({ profile, banner }) {
         { role: "system", content: "You are a helpful assistant that specializes in recommending music and songs based on analyzing images" },
         {
           role: "user",
-          content: [
-            { type: "text", text: imagePrompt },
-            {
-              type: "image_url",
-              image_url: {
-                "url":  profile, // either url (not local) or base64. file id is used only in assistants api.
-              },
-            },
-            {
-              type: "image_url",
-              image_url: {
-                "url":  banner, // either url (not local) or base64. file id is used only in assistants api.
-              },
-            },
-          ],
+          content
         },
       ],
       max_tokens: 300,
@@ -173,13 +177,13 @@ async function suggestSpotifySong(analysisText) {
 }
 
 async function main(twitterUsername) {
-  const { profile, banner } = await getTwitterProfilePic(twitterUsername);
+  const { profile, banner, description } = await getTwitterProfilePic(twitterUsername);
 
-  if (!profile || !banner) {
+  if (!profile) {
     console.log('Failed to retrieve Twitter profile.');
     return;
   }
-  const analysis = await analyzeProfilePic({ profile, banner });
+  const analysis = await analyzeProfilePic({ profile, banner, description });
   //const analysis = await analyzeProfileManual("I like food and learning about how it reaches my plate. singaporean, likes gaming, enjoys food, new father");
   if (!analysis) {
     console.log('Failed to analyze profile.');

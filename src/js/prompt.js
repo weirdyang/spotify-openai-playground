@@ -10,6 +10,8 @@ Provide a single song genre that closely matches the profile, be concise, and us
 `;
 exports.prompt = prompt;
 
-const imagePrompt = `Provide a single song genre that closely matches the profile image, be concise, and use information from the tweets. Only reply with the genre, eg. "Lame Political Hiphop"`;
+const imagePrompt = (description) => `Provide a single song genre that closely matches the profile image, be concise,
+and use information from the tweets and the User description : ${description}.
+Only reply with the genre, eg. "Lame Political Hiphop"`;
 exports.imagePrompt = imagePrompt;
 

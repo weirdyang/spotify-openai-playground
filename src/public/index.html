@@ -241,7 +241,10 @@
                 </div>
             </div>
 
-            <div class="music-details">
+            <div
+                class="music-details hidden"
+                id="musicDetails"
+            >
                 <div class="now-playing">
                     <img
                         id="albumCover"
@@ -275,12 +278,13 @@
             // Show loading effect with typewriter cursor
             const profileContainer = document.getElementById('profileContainer');
             profileContainer.style.display = 'block';
-            document.getElementById('handleDisplay').innerText = '@' + handle;
+            document.getElementById('handleDisplay').innerText = '';
             document.getElementById('genreDisplay').innerText = 'Retrieving data...';
             document.getElementById('songDisplay').innerText = '';
             fetch(`/.netlify/functions/analyze?q=${handle}`)
                 .then(response => response.json())
                 .then(data => {
+                    document.getElementById('musicDetails').classList.remove('hidden');
                     document.getElementById('profilePic').src = data.profile;
                     document.getElementById('profilePic').classList.remove('hidden');
                     document.getElementById('handleDisplay').innerText = '@' + handle;
