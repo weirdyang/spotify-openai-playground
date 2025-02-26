@@ -269,7 +269,7 @@
 
     <script>
 
-        function fetchData() {
+        async function fetchData() {
             const handle = document.getElementById('twitterHandle').value;
             if (!handle) {
                 alert('Please enter a Twitter handle');
@@ -281,22 +281,23 @@
             document.getElementById('handleDisplay').innerText = '';
             document.getElementById('genreDisplay').innerText = 'Retrieving data...';
             document.getElementById('songDisplay').innerText = '';
-            fetch(`/.netlify/functions/analyze?q=${handle}`)
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById('musicDetails').classList.remove('hidden');
-                    document.getElementById('profilePic').src = data.profile;
-                    document.getElementById('profilePic').classList.remove('hidden');
-                    document.getElementById('handleDisplay').innerText = '@' + handle;
-                    document.getElementById('genreDisplay').innerText = 'Genre: ' + data.genre;
-                    document.getElementById('songDisplay').innerText = data.song.name + ' by ' + data.song.artist;
-                    document.getElementById('albumCover').src = data.song.img;
-                    document.getElementById('albumCover').classList.remove('hidden');
-                    document.getElementById('spotifyLink').href = data.song.url;
-                    document.getElementById('profileContainer').style.display = 'block';
-                })
-                .catch(error => console.error('Error fetching data:', error));
-
+            const res = await fetch(`/.netlify/functions/analyze?q=${handle}`);
+            if (res.ok) {
+                const data = await res.json();
+                document.getElementById('musicDetails').classList.remove('hidden');
+                document.getElementById('profilePic').src = data.profile;
+                document.getElementById('profilePic').classList.remove('hidden');
+                document.getElementById('handleDisplay').innerText = '@' + handle;
+                document.getElementById('genreDisplay').innerText = 'Genre: ' + data.genre;
+                document.getElementById('songDisplay').innerText = data.song.name + ' by ' + data.song.artist;
+                document.getElementById('albumCover').src = data.song.img;
+                document.getElementById('albumCover').classList.remove('hidden');
+                document.getElementById('spotifyLink').href = data.song.url;
+                document.getElementById('profileContainer').style.display = 'block';
+            } else {
+                console.error(await res.json());
+                document.getElementById('genreDisplay').innerText = 'whoops';
+            }
         }
 
         // Add typewriter sound effect on button click (optional)

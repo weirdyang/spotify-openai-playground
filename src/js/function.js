@@ -64,8 +64,8 @@ async function getTwitterProfilePic(username) {
       const description = userData.description;
       return { profile, banner, description }
   } catch (error) {
-    console.error('Error fetching Twitter profile:', error);
-    return null;
+    console.error(error);
+    throw new Error('Unable to get twitter profile')
   }
 }
 async function analyzeProfile(profileDescription, recentTweets) {
@@ -180,35 +180,23 @@ async function main(twitterUsername) {
   const { profile, banner, description } = await getTwitterProfilePic(twitterUsername);
 
   if (!profile) {
-    console.log('Failed to retrieve Twitter profile.');
-    return;
+    throw new Error('Failed to retrieve Twitter profile.');
   }
   const analysis = await analyzeProfilePic({ profile, banner, description });
   //const analysis = await analyzeProfileManual("I like food and learning about how it reaches my plate. singaporean, likes gaming, enjoys food, new father");
   if (!analysis) {
-    console.log('Failed to analyze profile.');
-    return;
+    throw new Error('Failed to analyze profile.');
   }
   const songInfo = await suggestSpotifySong(analysis.content);
+  if(!songInfo) {
+    throw new Error("No song returned");
+  }
   const result = {
     profile,
     banner,
     genre: analysis.content,
     song: songInfo.sort((a, b) => b.popularity - a.popularity)[0]
   };
-
-  if(songInfo && songInfo.length > 0){
-    for (let i = 0; i < songInfo.length; i++) {
-      const element = songInfo[i];
-      if (element) {
-        console.log(`Suggested Song: ${element.name} by ${element.artist}`);
-        console.log(`Spotify Link: ${element.url}`);
-        console.log(`Popularity: ${element.popularity}`);
-      } else {
-        console.log('Could not find a suitable song.');
-      }
-    }
-  }
 
   return result;
 }

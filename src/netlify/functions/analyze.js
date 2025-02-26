@@ -17,15 +17,11 @@ exports.handler = async function ({ queryStringParameters }) {
       body: JSON.stringify(userData, null, 2)
     }
   } catch (error) {
-    console.log(error);
+    console.error(error, 'error');
     return {
       statusCode: 500,
       headers,
-      body: JSON.stringify(
-        {
-          error: 'whoops'
-        }, null, 2
-      )
+      body: JSON.stringify(error, null, 2)
     }
   }
 }
