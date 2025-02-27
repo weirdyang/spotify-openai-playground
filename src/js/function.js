@@ -29,6 +29,16 @@ async function getTwitterProfile(username) {
       const userData = await socialDataResponse.json();
       console.log(JSON.stringify(userData));
       const userId = userData.id;
+      const tweetText = await getTweets(userId);
+      return { description: userData.description, tweetText };
+  } catch (error) {
+    console.error('Error fetching Twitter profile:', error);
+    return null;
+  }
+}
+
+async function getTweets(userId) {
+  try {
       const tweets = await fetch(`https://api.socialdata.tools/twitter/user/${userId}/tweets?`,
         {
           method: 'GET',
@@ -38,12 +48,12 @@ async function getTwitterProfile(username) {
           }
         });
       const tweetData = await tweets.json();
-      console.log(tweetData);
+      console.log(tweetData, 'tweets');
       const tweetText = tweetData.tweets.map(tw => tw.full_text);
-      return { description: userData.description, tweetText };
-  } catch (error) {
-    console.error('Error fetching Twitter profile:', error);
-    return null;
+      return tweetText;
+    } catch (error) {
+
+      return null;
   }
 }
 
@@ -62,6 +72,7 @@ async function getTwitterProfilePic(username) {
       const profile = userData.profile_image_url_https;
       const banner = userData.profile_banner_url;
       const description = userData.description;
+      const recentTweets = await getTweets(userData.id_str);
       return { profile, banner, description }
   } catch (error) {
     console.error(error);
@@ -84,7 +95,7 @@ async function analyzeProfile(profileDescription, recentTweets) {
     return null;
   }
 }
-async function analyzeProfilePic({ profile, banner, description }) {
+async function analyzeProfilePic({ profile, banner, description, recentTweets }) {
   console.log(profile, banner);
   const content = [
     { type: "text", text: imagePrompt(description) },
@@ -177,12 +188,12 @@ async function suggestSpotifySong(analysisText) {
 }
 
 async function main(twitterUsername) {
-  const { profile, banner, description } = await getTwitterProfilePic(twitterUsername);
+  const { profile, banner, description, recentTweets } = await getTwitterProfilePic(twitterUsername);
 
   if (!profile) {
     throw new Error('Failed to retrieve Twitter profile.');
   }
-  const analysis = await analyzeProfilePic({ profile, banner, description });
+  const analysis = await analyzeProfilePic({ profile, banner, description, recentTweets });
   //const analysis = await analyzeProfileManual("I like food and learning about how it reaches my plate. singaporean, likes gaming, enjoys food, new father");
   if (!analysis) {
     throw new Error('Failed to analyze profile.');
