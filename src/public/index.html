@@ -7,15 +7,10 @@
         name="viewport"
         content="width=device-width, initial-scale=1.0"
     >
-    <!-- Primary Meta Tags -->
-    <title>Twitter Music Profile</title>
-    <meta
-        name="title"
-        content="Twitter Music Profile"
-    >
+    <title>SoundTrackr - Discover Your Twitter Sound</title>
     <meta
         name="description"
-        content="Discover and listen to your favorite tracks directly through our Twitter Music Profile."
+        content="SoundTrackr turns your Twitter profile into music recommendations that match your personality."
     >
 
     <!-- Open Graph / Facebook Meta Tags -->
@@ -29,11 +24,11 @@
     >
     <meta
         property="og:title"
-        content="Twitter Music Profile"
+        content="SoundTrackr - Discover Your Twitter Sound"
     >
     <meta
         property="og:description"
-        content="Discover and listen to your favorite tracks directly through our Twitter Music Profile."
+        content="Turn your Twitter profile into a personalized music experience."
     >
     <meta
         property="og:image"
@@ -51,242 +46,392 @@
     >
     <meta
         property="twitter:title"
-        content="Twitter Music Profile"
+        content="SoundTrackr - Discover Your Twitter Sound"
     >
     <meta
         property="twitter:description"
-        content="Discover and listen to your favorite tracks directly through our Twitter Music Profile."
+        content="Turn your Twitter profile into a personalized music experience."
     >
     <meta
         property="twitter:image"
         content="https://zesty-paletas-8c1f97.netlify.app/meta-image.png"
     >
+
     <style>
-        .music-details {
-            margin-top: 1.5rem;
-            padding-top: 1.5rem;
-            border-top: 1px dashed #333;
+        :root {
+            --primary: #1DB954;
+            --secondary: #1A1A1A;
+            --text: #FFFFFF;
+            --text-secondary: #B3B3B3;
+            --background: #121212;
+            --card-bg: #181818;
+            --hover: #282828;
         }
 
-        .now-playing {
-            margin-bottom: 1rem;
-            padding: 1rem;
-            background-color: #f9f9f5;
-            border-left: 3px solid #333;
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
-        }
-
-        .album-cover {
-            width: 100px;
-            height: 100px;
-            border-radius: 12px;
-            object-fit: cover;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            border: 1px solid #ddd;
-        }
-
-        .song-info {
-            flex: 1;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
         }
 
         body {
-            font-family: 'Courier New', Courier, monospace;
-            background-color: #f5f5f0;
-            color: #333;
+            background-color: var(--background);
+            color: var(--text);
             line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
             padding: 2rem;
+        }
+
+        .container {
             max-width: 800px;
-            margin: 0 auto;
+            width: 100%;
+        }
+
+        header {
             text-align: center;
+            margin-bottom: 3rem;
         }
 
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 1.5rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            border-bottom: 2px solid #333;
-            padding-bottom: 0.5rem;
+        .logo {
+            font-size: 3rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(90deg, var(--primary), #4A90E2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        .paper {
-            background-color: #fff;
+        .tagline {
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        .search-box {
+            background-color: var(--card-bg);
             padding: 2rem;
-            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
-            position: relative;
-            border: 1px solid #ddd;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
         }
 
-        .paper::before {
-            content: '';
-            position: absolute;
-            top: -5px;
-            left: -5px;
-            right: -5px;
-            bottom: -5px;
-            border: 1px solid #ddd;
-            z-index: -1;
+        .input-group {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
         }
 
         input {
-            font-family: 'Courier New', Courier, monospace;
-            padding: 0.8rem;
-            width: 100%;
-            max-width: 300px;
-            margin-bottom: 1rem;
-            border: 1px solid #333;
-            background-color: #f9f9f5;
+            flex: 1;
+            background-color: var(--secondary);
+            border: none;
+            border-radius: 30px;
+            color: var(--text);
+            padding: 1rem 1.5rem;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        input:focus {
+            box-shadow: 0 0 0 2px var(--primary);
+        }
+
+        input::placeholder {
+            color: var(--text-secondary);
         }
 
         button {
-            font-family: 'Courier New', Courier, monospace;
-            background-color: #333;
-            color: #fff;
+            background-color: var(--primary);
+            color: var(--secondary);
             border: none;
-            padding: 0.8rem 1.5rem;
+            border-radius: 30px;
+            padding: 1rem 2rem;
+            font-size: 1rem;
+            font-weight: 700;
             cursor: pointer;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
         }
 
         button:hover {
-            background-color: #555;
+            transform: scale(1.05);
+            background-color: #1ed760;
         }
 
-        .profile-container {
-            margin-top: 2rem;
+        .loader {
             display: none;
-            text-align: left;
-            border-top: 1px dashed #333;
-            padding-top: 1.5rem;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .pulse {
+            width: 40px;
+            height: 40px;
+            background-color: var(--primary);
+            border-radius: 50%;
+            margin: 0 auto;
+            animation: pulse 1.5s infinite ease-in-out;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(0.8);
+                opacity: 0.5;
+            }
+
+            50% {
+                transform: scale(1.2);
+                opacity: 1;
+            }
+
+            100% {
+                transform: scale(0.8);
+                opacity: 0.5;
+            }
+        }
+
+        .result-container {
+            display: none;
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
         }
 
         .profile-header {
             display: flex;
             align-items: center;
-            margin-bottom: 1.5rem;
+            padding: 1.5rem;
+            background-color: var(--secondary);
         }
 
-        .profile-image {
+        .profile-pic {
             width: 80px;
             height: 80px;
             border-radius: 50%;
             margin-right: 1.5rem;
-            border: 2px solid #333;
-        }
-
-        .profile-info {
-            flex: 1;
+            border: 3px solid var(--primary);
+            object-fit: cover;
         }
 
         .profile-info h2 {
             font-size: 1.5rem;
-            margin: 0 0 0.5rem 0;
+            margin-bottom: 0.5rem;
+        }
+
+        .profile-info p {
+            color: var(--text-secondary);
+        }
+
+        .song-container {
+            padding: 2rem;
+        }
+
+        .song-label {
+            font-size: 0.9rem;
             text-transform: uppercase;
             letter-spacing: 1px;
-        }
-
-        .music-details {
-            margin-top: 1.5rem;
-            padding-top: 1.5rem;
-            border-top: 1px dashed #333;
-        }
-
-        .now-playing {
+            color: var(--primary);
             margin-bottom: 1rem;
-            padding: 1rem;
-            background-color: #f9f9f5;
-            border-left: 3px solid #333;
         }
 
-        .spotify-link {
-            display: inline-block;
-            margin-top: 1rem;
-            color: #333;
+        .song-card {
+            display: flex;
+            align-items: center;
+            background-color: var(--secondary);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .song-card:hover {
+            background-color: var(--hover);
+            transform: translateY(-5px);
+        }
+
+        .album-cover {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+        }
+
+        .song-details {
+            padding: 1rem 1.5rem;
+            flex: 1;
+        }
+
+        .song-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .song-artist {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .spotify-button {
+            display: inline-flex;
+            align-items: center;
+            background-color: var(--primary);
+            color: var(--secondary);
             text-decoration: none;
-            border-bottom: 1px solid #333;
-            padding-bottom: 2px;
-            font-weight: bold;
-            transition: all 0.3s;
+            padding: 0.75rem 1.25rem;
+            border-radius: 30px;
+            font-weight: 700;
+            transition: all 0.3s ease;
         }
 
-        .spotify-link:hover {
-            color: #1DB954;
-            border-color: #1DB954;
+        .spotify-button:hover {
+            background-color: #1ed760;
+            transform: scale(1.05);
         }
 
-        .typewriter-cursor {
-            display: inline-block;
-            width: 10px;
+        .spotify-icon {
+            margin-right: 0.5rem;
+            width: 20px;
             height: 20px;
-            background-color: #333;
-            animation: blink 1s step-end infinite;
-            margin-left: 5px;
-            vertical-align: middle;
         }
 
-        @keyframes blink {
+        footer {
+            margin-top: 3rem;
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
 
-            from,
+        @media (max-width: 600px) {
+            .input-group {
+                flex-direction: column;
+            }
+
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .profile-pic {
+                margin-right: 0;
+                margin-bottom: 1rem;
+            }
+
+            .song-card {
+                flex-direction: column;
+            }
+
+            .album-cover {
+                width: 100%;
+                height: auto;
+            }
+        }
+
+        /* Animation classes */
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
             to {
                 opacity: 1;
-            }
-
-            50% {
-                opacity: 0;
+                transform: translateY(0);
             }
         }
 
-        .vintage-effect {
-            position: relative;
+        .wave {
+            display: inline-block;
+            height: 20px;
+            width: 3px;
+            background: var(--primary);
+            margin: 0 2px;
+            border-radius: 2px;
+            animation: wave 1s infinite ease-in-out;
         }
 
-        .vintage-effect::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: repeating-linear-gradient(transparent,
-                    transparent 2px,
-                    rgba(0, 0, 0, 0.03) 2px,
-                    rgba(0, 0, 0, 0.03) 4px);
-            pointer-events: none;
+        .wave:nth-child(2) {
+            animation-delay: 0.1s;
         }
 
-        .hidden {
-            display: none;
+        .wave:nth-child(3) {
+            animation-delay: 0.2s;
+        }
+
+        .wave:nth-child(4) {
+            animation-delay: 0.3s;
+        }
+
+        @keyframes wave {
+
+            0%,
+            40%,
+            100% {
+                transform: scaleY(0.4);
+            }
+
+            20% {
+                transform: scaleY(1);
+            }
         }
     </style>
 </head>
 
-<body class="vintage-effect">
-    <div class="paper">
-        <h1>Twitter Music Profile <span class="typewriter-cursor"></span></h1>
+<body>
+    <div class="container">
+        <header>
+            <h1 class="logo">SoundTrackr</h1>
+            <p class="tagline">Discover the music that matches your Twitter vibe</p>
+        </header>
 
-        <div>
-            <input
-                type="text"
-                id="twitterHandle"
-                placeholder="Enter Twitter handle..."
-            >
-            <button onclick="fetchData()">Discover</button>
+        <div class="search-box fade-in">
+            <div class="input-group">
+                <input
+                    type="text"
+                    id="twitterHandle"
+                    placeholder="Enter your Twitter handle (without @)"
+                >
+                <button id="discoverBtn">Discover</button>
+            </div>
+            <p
+                id="errorMessage"
+                style="color: #ff4d4d; text-align: center; display: none;"
+            ></p>
         </div>
 
         <div
-            id="profileContainer"
-            class="profile-container"
+            id="loader"
+            class="loader"
+        >
+            <div class="pulse"></div>
+            <p style="margin-top: 1rem;">Analyzing your Twitter personality...</p>
+            <div style="margin-top: 1rem;">
+                <div class="wave"></div>
+                <div class="wave"></div>
+                <div class="wave"></div>
+                <div class="wave"></div>
+            </div>
+        </div>
+
+        <div
+            id="resultContainer"
+            class="result-container fade-in"
         >
             <div class="profile-header">
                 <img
                     id="profilePic"
-                    class="profile-image hidden"
+                    class="profile-pic"
                     src=""
-                    alt="Profile"
+                    alt="Profile Picture"
                 >
                 <div class="profile-info">
                     <h2 id="handleDisplay"></h2>
@@ -294,68 +439,142 @@
                 </div>
             </div>
 
-            <div
-                class="music-details hidden"
-                id="musicDetails"
-            >
-                <div class="now-playing">
+            <div class="song-container">
+                <div class="song-label">Your Personality Soundtrack</div>
+                <div class="song-card">
                     <img
                         id="albumCover"
-                        class="album-cover hidden"
+                        class="album-cover"
                         src=""
                         alt="Album Cover"
                     >
-                    <div class="song-info">
-                        <p><strong>// NOW PLAYING:</strong></p>
-                        <p id="songDisplay"></p>
+                    <div class="song-details">
+                        <div
+                            class="song-title"
+                            id="songTitle"
+                        ></div>
+                        <div
+                            class="song-artist"
+                            id="songArtist"
+                        ></div>
+                        <a
+                            id="spotifyLink"
+                            class="spotify-button"
+                            href="#"
+                            target="_blank"
+                        >
+                            <svg
+                                class="spotify-icon"
+                                viewBox="0 0 24 24"
+                                fill="currentColor"
+                            >
+                                <path
+                                    d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.48.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"
+                                />
+                            </svg>
+                            Listen on Spotify
+                        </a>
                     </div>
                 </div>
-                <a
-                    id="spotifyLink"
-                    href="#"
-                    target="_blank"
-                    class="spotify-link"
-                >Listen on Spotify</a>
             </div>
         </div>
+
+        <footer>
+            <p>© 2025 SoundTrackr · Using AI to match your Twitter persona with music</p>
+        </footer>
     </div>
 
     <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const twitterHandleInput = document.getElementById('twitterHandle');
+            const discoverBtn = document.getElementById('discoverBtn');
+            const loader = document.getElementById('loader');
+            const resultContainer = document.getElementById('resultContainer');
+            const profilePic = document.getElementById('profilePic');
+            const handleDisplay = document.getElementById('handleDisplay');
+            const genreDisplay = document.getElementById('genreDisplay');
+            const albumCover = document.getElementById('albumCover');
+            const songTitle = document.getElementById('songTitle');
+            const songArtist = document.getElementById('songArtist');
+            const spotifyLink = document.getElementById('spotifyLink');
+            const errorMessage = document.getElementById('errorMessage');
 
-        async function fetchData() {
-            const handle = document.getElementById('twitterHandle').value;
-            if (!handle) {
-                alert('Please enter a Twitter handle');
-                return;
-            }
-            // Show loading effect with typewriter cursor
-            const profileContainer = document.getElementById('profileContainer');
-            profileContainer.style.display = 'block';
-            document.getElementById('handleDisplay').innerText = '';
-            document.getElementById('genreDisplay').innerText = 'Retrieving data...';
-            document.getElementById('songDisplay').innerText = '';
-            const res = await fetch(`/.netlify/functions/analyze?q=${handle}`);
-            if (res.ok) {
-                const data = await res.json();
-                document.getElementById('musicDetails').classList.remove('hidden');
-                document.getElementById('profilePic').src = data.profile;
-                document.getElementById('profilePic').classList.remove('hidden');
-                document.getElementById('handleDisplay').innerText = '@' + handle;
-                document.getElementById('genreDisplay').innerText = 'Genre: ' + data.genre;
-                document.getElementById('songDisplay').innerText = data.song.name + ' by ' + data.song.artist;
-                document.getElementById('albumCover').src = data.song.img;
-                document.getElementById('albumCover').classList.remove('hidden');
-                document.getElementById('spotifyLink').href = data.song.url;
-                document.getElementById('profileContainer').style.display = 'block';
-            } else {
-                console.error(await res.json());
-                document.getElementById('genreDisplay').innerText = 'whoops';
-            }
-        }
+            // Add event listeners
+            discoverBtn.addEventListener('click', fetchData);
+            twitterHandleInput.addEventListener('keypress', function (e) {
+                if (e.key === 'Enter') {
+                    fetchData();
+                }
+            });
 
-        // Add typewriter sound effect on button click (optional)
-        document.querySelector('button').addEventListener('click', function () {
-            // You could add a typewriter sound effect here if desired
+            async function fetchData() {
+                const handle = twitterHandleInput.value.trim();
+
+                // Clear previous error messages
+                errorMessage.style.display = 'none';
+
+                if (!handle) {
+                    showError('Please enter a Twitter handle');
+                    return;
+                }
+
+                // Remove @ if user entered it
+                const cleanedHandle = handle.startsWith('@') ? handle.substring(1) : handle;
+
+                // Show loader
+                loader.style.display = 'block';
+                resultContainer.style.display = 'none';
+
+                try {
+                    const response = await fetch(`/.netlify/functions/analyze?q=${cleanedHandle}`);
+
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch data');
+                    }
+
+                    const data = await response.json();
+
+                    // Hide loader
+                    loader.style.display = 'none';
+
+                    // Update the UI with the fetched data
+                    profilePic.src = data.profile;
+                    handleDisplay.textContent = '@' + cleanedHandle;
+                    genreDisplay.textContent = data.genre;
+                    albumCover.src = data.song.img;
+                    songTitle.textContent = data.song.name;
+                    songArtist.textContent = data.song.artist;
+                    spotifyLink.href = data.song.url;
+
+                    // Show result container with animation
+                    resultContainer.style.display = 'block';
+
+                    // Scroll to results
+                    resultContainer.scrollIntoView({ behavior: 'smooth' });
+
+                } catch (error) {
+                    console.error('Error:', error);
+                    loader.style.display = 'none';
+                    showError('Could not analyze this Twitter profile. Please try another handle.');
+                }
+            }
+
+            function showError(message) {
+                errorMessage.textContent = message;
+                errorMessage.style.display = 'block';
+            }
+
+            // Add hover effects for elements
+            const songCard = document.querySelector('.song-card');
+            if (songCard) {
+                songCard.addEventListener('mouseover', function () {
+                    this.style.transform = 'scale(1.02)';
+                });
+
+                songCard.addEventListener('mouseout', function () {
+                    this.style.transform = '';
+                });
+            }
         });
     </script>
 </body>
